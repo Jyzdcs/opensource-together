@@ -1,5 +1,5 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { findProjectByTitleQuery } from './find-project-by-title.query';
+import { FindProjectByTitleQuery } from './find-project-by-title.query';
 import { Inject } from '@nestjs/common';
 import { Project } from '@/domain/project/project.entity';
 import {
@@ -7,18 +7,17 @@ import {
   ProjectRepositoryPort,
 } from '@/application/ports/project.repository.port';
 
-@QueryHandler(findProjectByTitleQuery)
-export class findProjectByTitleHandler
-  implements IQueryHandler<findProjectByTitleQuery>
+@QueryHandler(FindProjectByTitleQuery)
+export class FindProjectByTitleHandler
+  implements IQueryHandler<FindProjectByTitleQuery>
 {
   constructor(
     @Inject(PROJECT_REPOSITORY_PORT)
     private readonly projectRepo: ProjectRepositoryPort,
   ) {}
 
-  async execute(query: findProjectByTitleQuery): Promise<Project[] | null> {
+  async execute(query: FindProjectByTitleQuery): Promise<Project[] | null> {
     const projects = await this.projectRepo.findProjectByTitle(query.title);
-
     return projects;
   }
 }
