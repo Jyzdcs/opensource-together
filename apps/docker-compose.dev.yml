@@ -14,7 +14,11 @@ services:
       - app_network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${BUSINESS_DB_USER} -d ${BUSINESS_DB_NAME}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${BUSINESS_DB_USER} -d ${BUSINESS_DB_NAME}",
+        ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -34,7 +38,11 @@ services:
       - app_network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${SUPERTOKEN_DB_USER} -d ${SUPERTOKEN_DB_NAME}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${SUPERTOKEN_DB_USER} -d ${SUPERTOKEN_DB_NAME}",
+        ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -118,31 +126,39 @@ services:
         condition: service_completed_successfully
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
 
   # Frontend application
-  frontend:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-    ports:
-      - "${FRONT_PORT}:3000"
-    networks:
-      - app_network
-    depends_on:
-      backend:
-        condition: service_started
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+  # frontend:
+  #   build:
+  #     context: ./web
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "${FRONT_PORT}:3000"
+  #   networks:
+  #     - app_network
+  #   depends_on:
+  #     backend:
+  #       condition: service_started
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 40s
 
 volumes:
   business_db_data:
