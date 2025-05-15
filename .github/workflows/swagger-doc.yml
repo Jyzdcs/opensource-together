@@ -15,9 +15,6 @@ jobs:
       - name: Copier le .env
         run: cp apps/server/.env.example apps/server/.env
 
-      - name: Générer le client Prisma
-        run: pnpm prisma generate
-
       - name: Lancer docker-compose
         run: docker compose -f apps/docker-compose.dev.yml up --build -d
 
